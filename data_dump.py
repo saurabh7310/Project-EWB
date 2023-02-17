@@ -5,8 +5,6 @@ import json
 
 
 client = pymongo.MongoClient("mongodb+srv://IndustryPWB:Saurabh@cluster0.q7kjrda.mongodb.net/?retryWrites=true&w=majority")
-db = client.test
-
 
 DATA_FILE_PATH = "insurance.csv"
 DATABASE_NAME = "INSURANCE"
