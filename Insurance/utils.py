@@ -5,7 +5,8 @@ import sys
 from Insurance.exception import InsuranceException
 from Insurance.config import mongo_client
 from Insurance.logger import logging
-
+import yaml
+import dill 
 
 def get_collection_as_dataframe(database_name:str, collection_name:str)->pd.DataFrame:
     try:
@@ -19,5 +20,27 @@ def get_collection_as_dataframe(database_name:str, collection_name:str)->pd.Data
         logging.info(f"Rows and Columns in df: {df.shape}")
         return df
 
+    except Exception as e:
+        raise InsuranceException(e, sys)
+    
+def write_yaml_file(file_path, data:dict):
+    try:
+        file_dir= os.path.dirname(file_path)
+        os.makedirs(file_dir, exist_ok= True)
+        with open(file_path, "w") as file_write:
+            yaml.dump(data, file_write)
+
+    except Exception as e:
+        raise InsuranceException(e, sys)
+    
+
+def convert_columns_float(df:pd.DataFrame, exclude_columns:list)->pd.DataFrame:
+    try:
+        for column in df.columns:
+            if column not in exclude_columns:
+                if df[column].dtypes != 'O':
+                    df[column] = df[column].astype('float')
+
+        return df
     except Exception as e:
         raise InsuranceException(e, sys)
